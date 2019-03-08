@@ -2,6 +2,7 @@ import exifread as ef
 import re
 from gmplot import gmplot
 from datetime import datetime
+from config import API_KEY
 
 pic = 'images/phone_pic.jpg'
 
@@ -62,7 +63,9 @@ def main():
     lat = DMS_to_DD(lat)
     lon = DMS_to_DD(lon)
 
-    gmap = gmplot.GoogleMapPlotter(36.1, -115.2, 13)
+    gmap = gmplot.GoogleMapPlotter(36.1, -115.2, 13, apikey=API_KEY)
+    # gmap.coloricon = pic
+
     add_marker(gmap, lat, lon)
     gmap.draw("my_map.html")
 
