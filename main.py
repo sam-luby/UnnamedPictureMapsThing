@@ -31,7 +31,12 @@ def get_date(file):
 
 
 def get_dimensions(file):
-    pass
+    with open(pic, 'rb') as f:
+        tags = ef.process_file(f)
+        x = str(tags.get('EXIF ExifImageWidth'))
+        y = str(tags.get('EXIF ExifImageLength'))
+        f.close()
+    return x, y
 
 
 def format_date(date):
@@ -65,12 +70,11 @@ def main():
     lat, lon = get_gps_coords(pic)
     lat = DMS_to_DD(lat)
     lon = DMS_to_DD(lon)
+    x, y = get_dimensions(pic)
 
     gmap = plotter.MapPlot(36.1, -115.2, 13, apikey=API_KEY)
-    # gmap.marker(lat, lon, title='test title')
-    gmap.icon(lat, lon, pic, title='hello')
+    gmap.icon(lat, lon, pic, (x,y),title='hello')
     gmap.create_map("my_map.html")
-
     # date = get_date(pic)
     # format_date(date)
 

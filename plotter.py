@@ -18,8 +18,8 @@ class MapPlot(object):
         self.markers.append((lat, lng, title))
 
 
-    def icon(self, lat, lng, img, title="test title"):
-        self.icons.append((lat, lng, img, title))
+    def icon(self, lat, lng, img, img_dims, title="test title"):
+        self.icons.append((lat, lng, img, img_dims, title))
 
 
     def plot_markers(self, file):
@@ -31,7 +31,7 @@ class MapPlot(object):
     def plot_icons(self, file):
         for icon in self.icons:
             print(icon)
-            self.plot_icon(file, icon[0], icon[1], icon[2], icon[3])
+            self.plot_icon(file, icon[0], icon[1], icon[2], icon[3], icon[4])
 
 
     def plot_marker(self, file, lat, lon, title):
@@ -46,13 +46,18 @@ class MapPlot(object):
         file.write('\n')
 
 
-    def plot_icon(self, file, lat, lon, img, title):
+    def plot_icon(self, file, lat, lon, img, img_dims, title):
+        img_dim_x = img_dims[0]
+        img_dim_y = img_dims[1]
+        ratio = int(img_dim_y)/int(img_dim_x)
+        img_dim_y = int(ratio*80)
+
         file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
         img = self.imgs % 'phone_pic'
         print(img)
         file.write('\t\tvar img = {\n')
         file.write('\t\turl: "{0}",\n'.format(img))
-        file.write('\t\tscaledSize: new google.maps.Size(80, 64)};\n')
+        file.write('\t\tscaledSize: new google.maps.Size(80, %d)};\n' % img_dim_y)
         file.write('\t\tvar marker = new google.maps.Marker({\n')
         file.write('\t\ttitle: "%s",\n' % title)
         file.write('\t\ticon: img,\n')
