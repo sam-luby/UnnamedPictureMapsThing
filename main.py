@@ -1,6 +1,6 @@
 import exifread as ef
 import re
-from gmplot import gmplot
+import plotter
 from datetime import datetime
 from config import API_KEY
 
@@ -57,20 +57,21 @@ def add_marker(map, lat, lon):
     map.marker(lat, lon, 'cornflowerblue', title='test marker')
 
 
-
 def main():
     lat, lon = get_gps_coords(pic)
     lat = DMS_to_DD(lat)
     lon = DMS_to_DD(lon)
 
-    gmap = gmplot.GoogleMapPlotter(36.1, -115.2, 13, apikey=API_KEY)
-    # gmap.coloricon = pic
+    gmap = plotter.MapPlot(36.1, -115.2, 13, apikey=API_KEY)
 
-    add_marker(gmap, lat, lon)
-    gmap.draw("my_map.html")
+    # gmap.marker_icon(lat, lon, 'test-image', title='hello')
+    # gmap.marker(lat, lon, title='test title')
 
-    date = get_date(pic)
-    format_date(date)
+    gmap.icon(lat, lon, pic, title='hello')
+    gmap.create_map("my_map.html")
+
+    # date = get_date(pic)
+    # format_date(date)
 
 
 
