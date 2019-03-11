@@ -11,28 +11,28 @@ class MapPlot(object):
         self.apikey = str(apikey)
         self.markers = []
         self.icons = []
-        self.imgs = os.path.join(os.path.dirname(__file__), 'markers/%s')
+        self.imgs = os.path.join(os.path.dirname(__file__), 'images/%s')
 
 
     def marker(self, lat, lng, title="test title"):
         self.markers.append((lat, lng, title))
 
-
-    def icon(self, lat, lng, img, img_dims, title="test title"):
-        self.icons.append((lat, lng, img, img_dims, title))
-
+    def icon(self, img, title='test title'):
+        lat = img.coords[0]
+        lon = img.coords[1]
+        name = img.name
+        img_dims = img.dimensions
+        self.icons.append((lat, lon, name, img_dims, title))
 
     def plot_markers(self, file):
         for marker in self.markers:
             print(marker)
             self.plot_marker(file, marker[0], marker[1], marker[2])
 
-
     def plot_icons(self, file):
         for icon in self.icons:
             print(icon)
             self.plot_icon(file, icon[0], icon[1], icon[2], icon[3], icon[4])
-
 
     def plot_marker(self, file, lat, lon, title):
         file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
@@ -45,16 +45,14 @@ class MapPlot(object):
         file.write('\t\tmarker.setMap(map);\n')
         file.write('\n')
 
-
-    def plot_icon(self, file, lat, lon, img, img_dims, title):
+    def plot_icon(self, file, lat, lon, img_name, img_dims, title):
         img_dim_x = img_dims[0]
-        img_dim_y = img_dims[1]
+        img_dim_y = img_dims[1] 
         ratio = int(img_dim_y)/int(img_dim_x)
         img_dim_y = int(ratio*80)
-
         file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
-        img = self.imgs % 'phone_pic'
-        print(img)
+        img = os.path.join(self.imgs % img_name)
+        img = img.replace('\\','/')
         file.write('\t\tvar img = {\n')
         file.write('\t\turl: "{0}",\n'.format(img))
         file.write('\t\tscaledSize: new google.maps.Size(80, %d)};\n' % img_dim_y)
@@ -65,7 +63,6 @@ class MapPlot(object):
         file.write('\t\t});\n')
         file.write('\t\tmarker.setMap(map);\n')
         file.write('\n')
-
 
     def create_map(self, file_name):
         file = open(file_name, 'w')
@@ -85,7 +82,6 @@ class MapPlot(object):
         file.write('\t\t};\n')
         file.write('\t\tvar map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);\n')
         file.write('\n')
-
         self.plot_markers(file)
         self.plot_icons(file)
 
