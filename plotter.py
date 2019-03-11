@@ -48,9 +48,11 @@ class MapPlot(object):
 
     def plot_icon(self, file, lat, lon, img, title):
         file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
-        img = self.imgs % 'test-image'
+        img = self.imgs % 'phone_pic'
         print(img)
-        file.write('\t\tvar img = "{0}";\n'.format(img))
+        file.write('\t\tvar img = {\n')
+        file.write('\t\turl: "{0}",\n'.format(img))
+        file.write('\t\tscaledSize: new google.maps.Size(80, 64)};\n')
         file.write('\t\tvar marker = new google.maps.Marker({\n')
         file.write('\t\ttitle: "%s",\n' % title)
         file.write('\t\ticon: img,\n')

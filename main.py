@@ -30,6 +30,10 @@ def get_date(file):
     return date
 
 
+def get_dimensions(file):
+    pass
+
+
 def format_date(date):
     date, time = date.split(' ')
     date = date.split(':')
@@ -63,10 +67,7 @@ def main():
     lon = DMS_to_DD(lon)
 
     gmap = plotter.MapPlot(36.1, -115.2, 13, apikey=API_KEY)
-
-    # gmap.marker_icon(lat, lon, 'test-image', title='hello')
     # gmap.marker(lat, lon, title='test title')
-
     gmap.icon(lat, lon, pic, title='hello')
     gmap.create_map("my_map.html")
 
