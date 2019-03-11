@@ -11,7 +11,7 @@ class MapPlot(object):
         self.apikey = str(apikey)
         self.markers = []
         self.icons = []
-        self.imgs = os.path.join(os.path.dirname(__file__), 'markers/%s.png')
+        self.imgs = os.path.join(os.path.dirname(__file__), 'markers/%s')
 
 
     def marker(self, lat, lng, title="test title"):
