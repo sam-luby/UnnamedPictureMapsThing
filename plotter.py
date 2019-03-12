@@ -61,6 +61,7 @@ class MapPlot(object):
         file.write('\t\ticon: img,\n')
         file.write('\t\tposition: latlng\n')
         file.write('\t\t});\n')
+        file.write('\t\tmarker.addListener("click", toggleBounce);\n')
         file.write('\t\tmarker.setMap(map);\n')
         file.write('\n')
 
@@ -84,6 +85,15 @@ class MapPlot(object):
         file.write('\n')
         self.plot_markers(file)
         self.plot_icons(file)
+
+        # function for bouncing icons
+        file.write('\t\tfunction toggleBounce() {\n')
+        file.write('\t\t\tif (marker.getAnimation() !==null) {\n')
+        file.write('\t\t\t\tmarker.setAnimation(null);\n')
+        file.write('\t\t\t} else {\n')
+        file.write('\t\t\t\tmarker.setAnimation(google.maps.Animation.BOUNCE);\n')
+        file.write('\t\t\t}\n')
+        file.write('\t\t}\n')
 
         file.write('\t}\n')
         file.write('</script>\n')
