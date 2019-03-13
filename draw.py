@@ -6,23 +6,24 @@ import numpy as np
 img_width = 500
 img_height = 500
 
-img = Image.new('RGBA', (img_width, img_height), (0, 0, 0, 255))
-img = np.asarray(img)
+img=Image.open("camera_pic.jpg").convert("RGB")
+npImage=np.array(img)
+h,w=img.size
+print(img.size)
+x = min(img.size)
 
-cv2.circle(img, (int(img_width/2), int(img_height/2)), int(img_width/4), (100, 100, 100), 10)
-cv2.imwrite('test-img.png', img)
+# Create same size alpha layer with circle
+alpha = Image.new('L', img.size,0)
+draw = ImageDraw.Draw(alpha)
+draw.pieslice([0,0,h,w],0,360,fill=255)
 
-image = cv2.imread('./test-img.png')
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGBA)
-img[np.all(img == [0, 0, 0, 255], axis=2)] = [0, 0, 0, 0]
-cv2.imwrite('test-img.png', img)
+# Convert alpha Image to numpy array
+npAlpha=np.array(alpha)
 
+# Add alpha layer to RGB
+npImage=np.dstack((npImage,npAlpha))
 
-
-# image = Image.new('RGBA', (200, 200))
-# draw = ImageDraw.Draw(image)
-# draw.ellipse((20, 20, 180, 180), fill = 'blue', outline ='blue')
-# draw.point((100, 100), 'red')
-# image.save('test.png')
-# img = np.zeros((img_width, img_height, 3), np.uint8)
-# cv2.line(img,(0,0),(511,511),(255,0,0),10) 
+# Save with alpha
+npImage = npImage[0:x, 0:x]
+img = Image.fromarray(npImage)
+img.save('result.png')
