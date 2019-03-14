@@ -4,7 +4,7 @@ import numpy as np
 
 
 
-def create_portrait(image):
+def create_portrait(image, directory, index):
 
     img = Image.open(image).convert("RGB")
 
@@ -31,7 +31,7 @@ def create_portrait(image):
     new_img_size = int(0.1*x)
     img = img.resize((new_img_size, new_img_size))
 
-    save_loc = 'images/result.png'
+    save_loc = "{0}/result_{1}.png".format(directory, index)
     img.save(save_loc)
 
     return save_loc
