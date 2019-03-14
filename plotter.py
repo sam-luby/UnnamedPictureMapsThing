@@ -11,7 +11,7 @@ class MapPlot(object):
         self.apikey = str(apikey)
         self.markers = []
         self.icons = []
-        self.imgs = os.path.join(os.path.dirname(__file__), 'images/%s')
+        self.imgs = os.path.join(os.path.dirname(__file__), '%s')
 
 
     def marker(self, lat, lng, title="test title"):
@@ -21,8 +21,9 @@ class MapPlot(object):
         lat = img.coords[0]
         lon = img.coords[1]
         name = img.name
+        img_loc = img.portrait_loc
         img_dims = img.dimensions
-        self.icons.append((lat, lon, name, img_dims, title))
+        self.icons.append((lat, lon, name, img_loc, img_dims, title))
 
     def plot_markers(self, file):
         for marker in self.markers:
@@ -32,7 +33,7 @@ class MapPlot(object):
     def plot_icons(self, file):
         for icon in self.icons:
             print(icon)
-            self.plot_icon(file, icon[0], icon[1], icon[2], icon[3], icon[4])
+            self.plot_icon(file, icon[0], icon[1], icon[2], icon[3], icon[4], icon[5])
 
     def plot_marker(self, file, lat, lon, title):
         file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
@@ -45,17 +46,14 @@ class MapPlot(object):
         file.write('\t\tmarker.setMap(map);\n')
         file.write('\n')
 
-    def plot_icon(self, file, lat, lon, img_name, img_dims, title):
-        img_dim_x = img_dims[0]
-        img_dim_y = img_dims[1] 
-        ratio = int(img_dim_y)/int(img_dim_x)
-        img_dim_y = int(ratio*80)
+    def plot_icon(self, file, lat, lon, img_name, img_loc,img_dims, title):
         file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
-        img = os.path.join(self.imgs % img_name)
+        img = os.path.join(self.imgs % img_loc)
+        print(img)
         img = img.replace('\\','/')
         file.write('\t\tvar img = {\n')
         file.write('\t\turl: "{0}",\n'.format(img))
-        file.write('\t\tscaledSize: new google.maps.Size(80, %d)};\n' % img_dim_y)
+        file.write('\t\tscaledSize: new google.maps.Size(80, 80)};\n')
         file.write('\t\tvar marker = new google.maps.Marker({\n')
         file.write('\t\ttitle: "%s",\n' % title)
         file.write('\t\ticon: img,\n')

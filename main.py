@@ -2,17 +2,19 @@ import exifread as ef
 import re
 import os
 import plotter
+import draw
 from datetime import datetime
 from config import API_KEY
+
 
 pic = 'images/img2.jpg'
 
 class Img(object):
-    def __init__(self, name, coords, dimensions):
+    def __init__(self, name, coords, dimensions, portrait_loc):
         self.name = name
         self.coords = coords
         self.dimensions = dimensions
-
+        self.portrait_loc = portrait_loc
 
 class ImagesData(object):
     def __init__(self):
@@ -67,11 +69,15 @@ def load_images(directory, images_data):
     directory = 'images'
     images = os.listdir(directory)
     for index, image in enumerate(images):
-        with open(os.path.join(directory, image), 'rb') as f:
+        path = os.path.join(directory, image)
+        with open(path, 'rb') as f:
             tags = ef.process_file(f)
             coords = get_gps_coords(f, tags)
             x, y = get_dimensions(f, tags)
-            img = Img(image, coords, (x, y))
+
+            portrait_loc = draw.create_portrait(path)
+
+            img = Img(image, coords, (x, y), portrait_loc)
             images_data.add_img(img)
         f.close()
     return images_data
@@ -87,11 +93,9 @@ def main():
     for im in images_data:
         gmap.icon(im, title="a caption")
     
-   
     gmap.create_map("my_map.html")
     # date = get_date(pic)
     # format_date(date)
-
     
 
 
