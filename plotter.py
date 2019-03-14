@@ -9,47 +9,27 @@ class MapPlot(object):
         self.center = (float(center_lat), float(center_lng))
         self.zoom = int(zoom)
         self.apikey = str(apikey)
-        self.markers = []
         self.icons = []
         self.imgs = os.path.join(os.path.dirname(__file__), '%s')
 
-
-    def marker(self, lat, lng, title="test title"):
-        self.markers.append((lat, lng, title))
-
-    def icon(self, img, title='test title'):
+    def icon(self, img):
         lat = img.coords[0]
         lon = img.coords[1]
         name = img.name
         img_loc = img.portrait_loc
         img_dims = img.dimensions
+        title = img.title
         self.icons.append((lat, lon, name, img_loc, img_dims, title))
-
-    def plot_markers(self, file):
-        for marker in self.markers:
-            print(marker)
-            self.plot_marker(file, marker[0], marker[1], marker[2])
 
     def plot_icons(self, file):
         for icon in self.icons:
             print(icon)
             self.plot_icon(file, icon[0], icon[1], icon[2], icon[3], icon[4], icon[5])
 
-    def plot_marker(self, file, lat, lon, title):
-        file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
-        file.write('\t\tvar img = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";\n')
-        file.write('\t\tvar marker = new google.maps.Marker({\n')
-        file.write('\t\ttitle: "{0}",\n'.format(title))
-        file.write('\t\ticon: img,\n')
-        file.write('\t\tposition: latlng\n')
-        file.write('\t\t});\n')
-        file.write('\t\tmarker.setMap(map);\n')
-        file.write('\n')
-
-    def plot_icon(self, file, lat, lon, img_name, img_loc,img_dims, title):
+    def plot_icon(self, file, lat, lon, img_name, img_loc, img_dims, title):
         file.write('\t\tvar latlng = new google.maps.LatLng({0}, {1});\n'.format(lat, lon))
         img = os.path.join(self.imgs % img_loc)
-        print(img)
+        # print(img)
         img = img.replace('\\','/')
         file.write('\t\tvar img = {\n')
         file.write('\t\turl: "{0}",\n'.format(img))
@@ -81,7 +61,6 @@ class MapPlot(object):
         file.write('\t\t};\n')
         file.write('\t\tvar map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);\n')
         file.write('\n')
-        self.plot_markers(file)
         self.plot_icons(file)
 
         # function for bouncing icons

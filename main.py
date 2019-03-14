@@ -8,11 +8,12 @@ from config import API_KEY
 
 
 class Img(object):
-    def __init__(self, name, coords, dimensions, portrait_loc):
+    def __init__(self, name, coords, dimensions, portrait_loc, title):
         self.name = name
         self.coords = coords
         self.dimensions = dimensions
         self.portrait_loc = portrait_loc
+        self.title = title
 
 
 class ImagesData(object):
@@ -50,8 +51,7 @@ def format_date(date):
     date = date.split(':')
     date.reverse()
     date = ('/').join(date)
-    print(date)
-
+    return date
 
 def DMS_to_DD(dms_ref):
     dms = dms_ref[0]
@@ -69,7 +69,6 @@ def DMS_to_DD(dms_ref):
 
 
 def load_images(directory, images_data):
-    # directory = 'images'
     images = os.listdir(directory)
     for index, image in enumerate(images):
         path = os.path.join(directory, image)
@@ -78,7 +77,8 @@ def load_images(directory, images_data):
             coords = get_gps_coords(f, tags)
             x, y = get_dimensions(f, tags)
             portrait_loc = draw.create_portrait(path, directory, index)
-            img = Img(image, coords, (x, y), portrait_loc)
+            date = get_date(path, tags)
+            img = Img(image, coords, (x, y), portrait_loc, date)
             images_data.add_img(img)
         f.close()
     return images_data
@@ -93,11 +93,9 @@ def main():
     gmap = plotter.MapPlot(36.1, -115.2, 13, apikey=API_KEY)
 
     for im in images_data:
-        gmap.icon(im, title="a caption")
+        gmap.icon(im)
 
     gmap.create_map("my_map.html")
-    # date = get_date(pic)
-    # format_date(date)
 
 
 if __name__ == '__main__':

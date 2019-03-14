@@ -5,12 +5,10 @@ import numpy as np
 
 
 def create_portrait(image, directory, index):
-
     img = Image.open(image).convert("RGB")
-
     npImage=np.array(img)
     h,w=img.size
-    print(img.size)
+    # print(img.size)
     x = min(img.size)
 
     # Create same size alpha layer with circle
