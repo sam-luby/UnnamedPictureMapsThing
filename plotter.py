@@ -74,6 +74,8 @@ class MapPlot(object):
 
         file.write('\t}\n')
         file.write('</script>\n')
+        favicon = os.path.join(self.imgs % 'markers/favicon.gif')
+        file.write('<link rel="icon" href="{0}" type="image/gif"></link>\n'.format(favicon))
         file.write('</head>\n')
         file.write('<body style="margin:0px; padding:0px;" onload="initialize()">\n')
         file.write('\t<div id="map_canvas" style="width: 100%; height: 100%;"></div>\n')
