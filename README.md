@@ -23,6 +23,7 @@ ii. pip installed
 2. Run 'py(thon) main.py <folder path>'
   
 For the example given here - inside the src directory - this would be "py main.py ../examples-trips/phoenixpark/"
+
 3. Open the new map html file and you should see your pictures plotted where they were taken.
 
 
