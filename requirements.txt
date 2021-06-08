@@ -78,7 +78,7 @@ notebook==5.7.8
 pandocfilters==1.4.2
 parso==0.3.4
 pickleshare==0.7.5
-Pillow==6.2.0
+Pillow==8.2.0
 prometheus-client==0.6.0
 prompt-toolkit==2.0.9
 Pygments==2.3.1
@@ -130,7 +130,7 @@ opencv-python==4.0.0.21
 pandocfilters==1.4.2
 parso==0.3.4
 pickleshare==0.7.5
-Pillow==6.2.0
+Pillow==8.2.0
 prometheus-client==0.6.0
 prompt-toolkit==2.0.9
 Pygments==2.3.1
